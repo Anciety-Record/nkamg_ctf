@@ -119,3 +119,64 @@ flag{Pl34s3_p4y_4tt3nt10n_t0_tr4ff1c_s4f3ty_wh3n_y0u_4r3_0uts1d3}
 例如第一个红框有23个字母，我们对应到字母表第23位的w，以此类推得到wordgames。然后我们只需在提交页面来回尝试各种变体，发现
 `flag{word games}`
 是正确答案。
+
+
+## What's_this
+//以下来自群里某大佬的wp，这里做个存档，也供学习
+binwalk提取压缩包，明文攻击,得到解压密码`Hello_Hi`  
+解压得到2-stage         flowerdance.txt
+
+根据提示用cloacked-pixel提取出隐藏的文件，是个zip。  
+![](https://raw.githubusercontent.com/qingchenldl/BlogImage/master/img/20181203112909.png)   
+
+解压zip得到zip3和zip4，都是加密文件
+
+zip3的文件只有4B，采用CRC爆破得到内容`girl`
+
+脚本：
+```python
+import binascii
+import base64
+import string
+import itertools
+import struct
+
+alph = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/='
+
+crcdict = {}
+print "computing all possible CRCs..."
+for x in itertools.product(list(alph), repeat=4):
+    st = ''.join(x)
+    testcrc = binascii.crc32(st)
+    crcdict[struct.pack('<i', testcrc)] = st
+print "Done!"
+
+f = open('zip3.zip')
+data = f.read()
+f.close()
+crc = ''.join(data[14:18])
+if crc in crcdict:
+    print crcdict[crc]
+else:
+print "FAILED!"
+```
+用girl解压zip4得到了`fake_flag`和`what's next.txt`
+
+因为`what's next.txt`和zip4的数据长度一样，进行异或后得到新的zip解压得到flag。
+```python
+file1 = open('I_Love_You.emf','rb')
+#file2 = open("what's next.txt",'rb')
+#flag = open("flag",'wb')
+file3 = open('zip4.zip', 'rb')
+f1 = file1.read()
+#f2 = file2.read()
+f3 = file3.read()
+print len(f1),len(f3)
+out = ''
+for i in range(len(f3)):
+	out += chr(ord(f1[i])^ord(f3[i]))
+
+with open('flag.zip', 'w') as f:
+	f.write(out)
+```
+得到新的压缩包，打开之后得到真的flag。
