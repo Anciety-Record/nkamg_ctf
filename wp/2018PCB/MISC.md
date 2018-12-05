@@ -121,10 +121,13 @@ flag{Pl34s3_p4y_4tt3nt10n_t0_tr4ff1c_s4f3ty_wh3n_y0u_4r3_0uts1d3}
 是正确答案。
 
 
-## What's_this
-//以下来自群里某大佬的wp，这里做个存档，也供学习
-binwalk提取压缩包，明文攻击,得到解压密码`Hello_Hi`  
-解压得到2-stage         flowerdance.txt
+## Other Sources
+
+### What's_this
+
+> 以下来自群里某大佬的 wp, 这里做个存档, 也供学习, binwalk提取压缩包, crc32 碰撞攻击, 得到解压密码 `Hello_Hi`
+
+解压得到 2-stage         flowerdance.txt
 
 根据提示用cloacked-pixel提取出隐藏的文件，是个zip。  
 ![](https://raw.githubusercontent.com/qingchenldl/BlogImage/master/img/20181203112909.png)   
